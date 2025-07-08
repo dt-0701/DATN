@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_KEY } from "./config/firebase";
 import "./login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import imgLogin from "./image/logo1.png";
+import imgLogin from "./image/LOGO_quantrac.png";//src\image\LOGO_quantrac.png
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 export default function Login() {
@@ -66,19 +66,19 @@ export default function Login() {
         style={{ backgroundColor: "#6D929B" }}
       >
         <div className="header-text">
-          <h3>HỆ THỐNG PHÁT HIỆN</h3>
-          <h3>VÀ CẢNH BÁO CHÁY SỚM</h3>
+          <h3>HỆ THỐNG IOT</h3>
+          <h3>QUAN TRẮC CHẤT LƯỢNG KHÔNG KHÍ</h3>
         </div>
       </div>
 
       <div className="text-center size-lg" style={{ marginTop: "40px" }}>
-        <h3>Học Viện Kỹ Thuật Mật Mã </h3>
+        <h3>ĐẠI HỌC BÁCH KHOA HÀ NỘI </h3>
         
       </div>
       <div className="text-center size-sm" style={{ marginTop: "60px" }}>
-        <h4>KMA</h4>
-        <h4>Học Viện</h4>
-        <h5>Kỹ Thuật Mật Mã</h5>
+        <h4>BKA</h4>
+        <h4>ĐẠI HỌC</h4>
+        <h5>BÁCH KHOA HÀ NỘI</h5>
        
       </div>
     </div>

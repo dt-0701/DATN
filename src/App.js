@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import "./index.css";
-import logo from "./image/logo-hvktmm.png";
+import logo from "./image/Logo_Hust.png";//src\image\Logo_Hust.png
 import axios from "axios";
-import { HumidityChart, SmokeChart, TemperatureChart } from "./ChartDetail";
+//import { HumidityChart, SmokeChart, TemperatureChart } from "./ChartDetail";
+import { HumidityChart, TemperatureChart, COChart, PMChart } from "./ChartDetail";
+
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useNavigate } from "react-router-dom";
 
@@ -43,8 +45,10 @@ function App() {
   // hop 1
 
   const [humiData, sethumiData] = useState(0);
-  const [smokeData, setsmokeData] = useState(0);
+  //const [smokeData, setsmokeData] = useState(0);
   const [tempData, settempData] = useState(0);
+  const [coData, setcoData] = useState(0);
+  const [pmData, setpmData] = useState(0);
 
 
   const [status, setstatus] = useState(null);
@@ -133,13 +137,15 @@ function App() {
 const getValueData = async () => {
   try {
     const response = await axios.get(
-      "https://test2-d9c33-default-rtdb.firebaseio.com/Room1/read.json"
+      "https://datn-a5156-default-rtdb.asia-southeast1.firebasedatabase.app/Room1/read.json"
     );
     const result = response?.data;
 
     sethumiData(result?.humi);
-    setsmokeData(result?.smoke);
+    //setsmokeData(result?.smoke);
     settempData(result?.temp);
+    setcoData(result?.co);
+    setpmData(result?.pm);
 
     console.log("data", result);
   } catch (error) {
@@ -213,9 +219,12 @@ useEffect(() => {
 
   // hop 1 
   listenToFirebaseData("Room1/read/humi", sethumiData);
-  listenToFirebaseData("Room1/read/smoke", setsmokeData);
+  //listenToFirebaseData("Room1/read/smoke", setsmokeData);
   listenToFirebaseData("Room1/read/temp", settempData);
+  listenToFirebaseData("Room1/read/co", setcoData);
+  listenToFirebaseData("Room1/read/pm", setpmData);
   listenToFirebaseData("Room1/online/timestamp", settimestamp);
+
 
 
   // // hop 2 
@@ -234,20 +243,20 @@ useEffect(() => {
 
 
 useEffect(() => {
-  const sendMail = async (temperature, humidity, smoke, temperature2, humidity2, smoke2) => {
+  const sendMail = async (temperature, humidity, co, pm, smoke, temperature2, humidity2, smoke2) => {
     try {
       const emailData = {
-        user_name: 'HeThongBaoChay',
-        user_email: 'hathunguyenthi06@gmail.com',
-        message: `Phòng 1: Nhiệt độ ${temperature}, Độ ẩm ${humidity}, Khói ${smoke}`,
+        user_name: 'HeThongQuanTracKhongKhi',
+        user_email: 'ducthang0701@gmail.com',
+        message: `NODE1: Nhiệt độ: ${temperature}, Độ ẩm: ${humidity}, Khí CO: ${co}, Bụi Mịn: ${pm}`,
       };
 
       // Gửi email bằng EmailJS
       const response = await emailjs.send(
-        'service_ikjdpvi', // ID của service bạn đã tạo trên EmailJS
-        'template_jo6ipmd', // ID của template bạn đã tạo trên EmailJS
+        'service_i27vwkh', // ID của service bạn đã tạo trên EmailJS
+        'template_sr03wi8', // ID của template bạn đã tạo trên EmailJS
         emailData,
-        'mbm5JqtgOvY5-BI-Z' // publicKey
+        '1bjCTB-d1ZEIT79DT' // publicKey
       );
 
       console.log('Email sent:', response);
@@ -263,7 +272,9 @@ useEffect(() => {
     sosData === 1 &&
     tempData !== undefined &&
     humiData !== undefined &&
-    smokeData !== undefined 
+    coData !== undefined &&
+    pmData !== undefined
+    //smokeData !== undefined 
     // tempData2 !== undefined &&
     // humiData2 !== undefined &&
     // smokeData2 !== undefined
@@ -271,13 +282,15 @@ useEffect(() => {
     sendMail(
       tempData.toString(),
       humiData.toString(),
-      smokeData.toString()
+      coData.toString(),
+      pmData.toString()
+      //smokeData.toString()
       // tempData2.toString(),
       // humiData2.toString(),
       // smokeData2.toString()
     );
   }
-}, [sosData, tempData, humiData, smokeData ]);
+}, [sosData, tempData, humiData, coData, pmData ]);
 //...........
 
 
@@ -289,10 +302,10 @@ useEffect(() => {
   const getStatusData = async () => {
     try {
       const response = await axios.get(
-        "https://test2-d9c33-default-rtdb.firebaseio.com/Room1/online.json"
+        //"https://test2-d9c33-default-rtdb.firebaseio.com/Room1/online.json"
 
 
-       // https://datn-a5156-default-rtdb.asia-southeast1.firebasedatabase.app/
+        "https://datn-a5156-default-rtdb.asia-southeast1.firebasedatabase.app/Room1/online.json"
       );
 
       const result = response?.data;
@@ -382,7 +395,7 @@ useEffect(() => {
         </div>
         <div className="text-header-main">
           <p style={{ marginBottom: "0px", fontWeight: "bold", textAlign: 'center' }}>
-            HỆ THỐNG PHÁT HIỆN VÀ CẢNH BÁO CHÁY SỚM
+            HỆ THỐNG IOT QUAN TRẮC CHẤT LƯỢNG KHÔNG KHÍ 
           </p>
         </div>
         <div className="header-right" style={{ position: "relative" }}>
@@ -472,10 +485,12 @@ useEffect(() => {
     <p>Loading...</p>
   ) : (
     <div className="chart">
-      <div className="text-box">Thông số phòng</div>
+      <div className="text-box">Thông số node 1</div>
       <HumidityChart humidity={humiData} />
-      <SmokeChart smoke={smokeData} />
+      {/* <SmokeChart smoke={smokeData} /> */}
       <TemperatureChart temperature={tempData} />
+      <COChart co={coData} />
+      <PMChart pm={pmData} />
     </div>
   )}
 </div>
