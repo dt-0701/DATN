@@ -322,7 +322,7 @@ useEffect(() => {
   console.log('newtimestamp:', newtimestamp);
   
   useEffect(() => {
-    const intervalId = setInterval(getStatusData, 10000);
+    const intervalId = setInterval(getStatusData, 30000); // trạng thái onl off cập nhật sau 10s
   
     if (lastTimestamp !== newtimestamp) {
       setstatus(1);
